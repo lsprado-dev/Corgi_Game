@@ -8,9 +8,9 @@
     :root {
       --mario-sky: #5c94fc;
       --night-sky: #0f172a;
-      --primary: #FF9F1C; /* Laranja */
+      --primary: #FF9F1C; 
       --secondary: #FFBF69;
-      --accent: #7f5af0;  /* Roxo */
+      --accent: #7f5af0;  
       --background: #CBF3F0;
       --text: #2EC4B6;
       --text-dark: #2B2D42;
@@ -247,31 +247,29 @@
       background-position: bottom;
       background-repeat: no-repeat;
       z-index: 4;
-      filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.15));
     }
 
     #obstacle {
       position: absolute;
       bottom: 35px; 
-      left: 100%;
+      left: 100%; /* Voltamos a usar 'left' como na versão perfeita */
       width: 45px; 
       height: 55px; 
       z-index: 3;
       display: none;
-      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
       background-size: contain;
       background-repeat: no-repeat;
       background-position: bottom center;
     }
 
-    /* --- LAYOUT DO MODAL OTIMIZADO PARA PERFORMANCE E COM DESTAQUE ROXO --- */
+    /* --- LAYOUT DO MODAL OTIMIZADO (O visual novo, mas leve) --- */
     .overlay-screen {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.92); /* Removido o blur pesadão, substituído por opacidade sólida */
+      background: rgba(255, 255, 255, 0.92); 
       display: flex;
       justify-content: center;
       align-items: center;
@@ -282,7 +280,7 @@
       background: var(--white);
       padding: 15px 25px; 
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(127, 90, 240, 0.15); /* Sombra mais leve com tom arroxeado */
+      box-shadow: 0 10px 30px rgba(127, 90, 240, 0.15); 
       width: 95%;
       max-width: 450px; 
       display: flex;
@@ -290,12 +288,6 @@
       align-items: center;
       gap: 20px;
       text-align: left;
-      animation: popIn 0.3s ease-out forwards;
-    }
-
-    @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.9) translateY(10px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .modal-image-container {
@@ -312,7 +304,7 @@
     }
 
     .modal-box h2 {
-      background: linear-gradient(45deg, var(--accent), var(--primary)); /* Começa com Roxo agora */
+      background: linear-gradient(45deg, var(--accent), var(--primary)); 
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-size: 1.5rem; 
@@ -355,7 +347,6 @@
       align-items: flex-start;
     }
 
-    /* Cores Temáticas nos Badges */
     .stat-badge.score-badge { border-color: var(--accent); background: #f3f0ff; }
     .stat-badge.score-badge .stat-value { color: var(--accent); }
     
@@ -378,7 +369,7 @@
 
     .action-btn {
       padding: 10px 15px; 
-      background: linear-gradient(to right, var(--accent), #9374ff); /* Roxo predominante */
+      background: linear-gradient(to right, var(--accent), #9374ff); 
       color: var(--white);
       border: none;
       border-radius: 12px;
@@ -433,7 +424,7 @@
     <header>
       <h1>Corgi Run</h1> 
       <div class="header-stats">
-        <button id="mute-btn" class="icon-btn" title="Mute/Unmute">🔊</button>
+        <button id="mute-btn" class="icon-btn" title="Mute/Unmute">🔇</button>
         <div id="high-score-header">Best: 0</div>
         <div id="score-display">Score: 0</div>
       </div>
@@ -512,16 +503,16 @@
       isGaming: false,
       score: 0,
       highScore: 0,
-      speed: 7, // Voltei para 7 para resolver a lentidão
+      speed: 7, 
       frames: 0,
       corgiY: 0,
       corgiVelocity: 0,
       gravity: 0.8,    
-      jumpPower: -16, // Voltei para -16 para o pulo ficar ágil
+      jumpPower: -16, 
       isGrounded: true,
       obstacleX: 1000,
       gameLoopId: null,
-      isMuted: false 
+      isMuted: true // Inicia MUDO!
     };
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -663,7 +654,7 @@
       state.isGaming = true;
       state.score = 0;
       state.frames = 0;
-      state.speed = 7; // Física rápida de volta
+      state.speed = 7; 
       state.corgiY = 0;
       state.obstacleX = DOM.gameArea.offsetWidth + 50;
       state.corgiVelocity = 0;
@@ -723,6 +714,7 @@
         }
       }
       
+      // DE VOLTA AO "LEFT" RAIZ QUE DEU CERTO ANTES!
       DOM.obstacle.style.left = `${state.obstacleX}px`;
     }
 
