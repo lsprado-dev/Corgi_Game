@@ -7,17 +7,14 @@
   <style>
     :root {
       --mario-sky: #5c94fc;
-      --primary: #FF9F1C;      /* Laranja original */
+      --night-sky: #0f172a;
+      --primary: #FF9F1C;
       --secondary: #FFBF69;
-      --accent: #7f5af0;       /* Novo Roxo */
+      --accent: #7f5af0;
       --background: #CBF3F0;
       --text: #2EC4B6;
       --text-dark: #2B2D42;
-      --ground-top: #80ED99;
-      --ground-bottom: #57CC99;
       --white: #FFFFFF;
-      --hill-dark: #00a800;
-      --hill-light: #4bd04b;
     }
 
     * {
@@ -56,26 +53,65 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      padding: 0 10px;
+      padding: 0 5px;
+      flex-wrap: wrap; 
+      gap: 10px;
     }
 
-    /* Título com degradê Laranja -> Roxo */
     h1 {
-      font-size: clamp(1.5rem, 5vw, 2.2rem);
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
       font-weight: 900;
       background: linear-gradient(45deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-transform: uppercase;
       letter-spacing: 1px;
+      margin-right: auto;
     }
 
-    /* Placar com toques de roxo */
+    .header-stats {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: var(--white);
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+      padding-bottom: 2px;
+    }
+
+    .icon-btn:hover {
+      transform: scale(1.1);
+      border-color: var(--accent);
+    }
+
+    #high-score-header {
+      font-size: clamp(0.9rem, 3vw, 1.1rem);
+      color: var(--primary);
+      background: var(--white);
+      padding: 8px 15px;
+      border-radius: 25px;
+      border: 2px solid var(--primary);
+      box-shadow: 0 4px 6px rgba(255, 159, 28, 0.15);
+      font-weight: 700;
+    }
+
     #score-display {
-      font-size: clamp(1rem, 4vw, 1.2rem);
+      font-size: clamp(0.9rem, 3vw, 1.1rem);
       color: var(--accent);
       background: var(--white);
-      padding: 8px 20px;
+      padding: 8px 15px;
       border-radius: 25px;
       border: 2px solid var(--accent);
       box-shadow: 0 4px 6px rgba(127, 90, 240, 0.15);
@@ -93,25 +129,14 @@
       overflow: hidden;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       border: 4px solid var(--white);
+      transition: background-color 8s ease; 
     }
 
-    #game-area::before {
-      content: '';
-      position: absolute;
-      bottom: 25px;
-      left: 0;
-      width: 100%;
-      height: 120px;
-      z-index: 0;
-      background-image: 
-        radial-gradient(circle at 20% 120px, var(--hill-dark) 60px, transparent 61px),
-        radial-gradient(circle at 20% 110px, var(--hill-light) 60px, transparent 61px),
-        radial-gradient(circle at 70% 130px, var(--hill-dark) 50px, transparent 51px),
-        radial-gradient(circle at 70% 120px, var(--hill-light) 50px, transparent 51px);
-      background-position: 0 0;
-      opacity: 0.8;
+    #game-area.night-mode {
+      background-color: var(--night-sky);
     }
 
+    /* Sol / Lua */
     #game-area::after {
       content: '';
       position: absolute;
@@ -123,46 +148,100 @@
       border-radius: 50%;
       box-shadow: 0 0 20px #fef08a;
       z-index: 0;
+      transition: background 8s ease, box-shadow 8s ease;
+    }
+
+    #game-area.night-mode::after {
+      background: #f1f5f9;
+      box-shadow: 0 0 20px #cbd5e1;
+    }
+
+    /* Sistema de Estrelas */
+    #stars-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 8s ease;
+      pointer-events: none;
+    }
+
+    #game-area.night-mode #stars-container {
+      opacity: 1;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 4px white;
+      animation: twinkle 2s infinite ease-in-out alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.3; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .shooting-star {
+      position: absolute;
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+      z-index: 0;
+    }
+
+    @keyframes shoot {
+      0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; }
+      100% { transform: translateX(-300px) translateY(300px) rotate(-45deg); opacity: 0; }
     }
 
     .cloud {
       position: absolute;
       background: var(--white);
       border-radius: 50px;
-      opacity: 0.95;
+      opacity: 0.8;
       z-index: 1;
       box-shadow: 20px 10px 0 5px var(--white), 40px 0px 0 0px var(--white);
+    }
+
+    @keyframes floatClouds {
+      0% { left: 100%; }
+      100% { left: -30%; }
     }
 
     #ground {
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 25px;
-      background: linear-gradient(to bottom, var(--ground-top) 30%, var(--ground-bottom) 100%);
+      height: 35px; 
+      background-image: url('https://cc-cdn.adobe.com/graceland/ILST/pt_BR/2.0.0/8d6807d0-9f62-11ed-a5b5-9969fa92018a/CAPA_1.jpg?1674948291310');
+      background-size: auto 100%;
+      background-repeat: repeat-x;
       border-top: 3px solid #2d6a4f;
       z-index: 2;
+      transition: filter 8s ease;
+    }
+
+    #game-area.night-mode #ground {
+      filter: brightness(0.4);
     }
 
     .ground-moving {
-      background-image: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 20px,
-        rgba(0, 0, 0, 0.05) 20px,
-        rgba(0, 0, 0, 0.05) 40px
-      );
-      animation: scrollGround 0.6s linear infinite;
+      animation: scrollGroundTexture 1s linear infinite;
     }
 
-    @keyframes scrollGround {
+    @keyframes scrollGroundTexture {
       from { background-position: 0 0; }
-      to { background-position: -56px 0; }
+      to { background-position: -200px 0; }
     }
 
     #corgi {
       position: absolute;
-      bottom: 25px;
+      bottom: 15px; 
       left: 10%;
       width: 80px;
       height: 60px;
@@ -174,16 +253,24 @@
       filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.15));
     }
 
+    /* --- NOVO CSS PARA O OBSTÁCULO COMO IMAGEM --- */
     #obstacle {
       position: absolute;
-      bottom: 22px;
+      bottom: 35px; /* Ajustado para "pisar" na grama perfeitamente */
       left: 100%;
-      font-size: 45px;
+      width: 50px; /* Largura definida para a caixa da imagem */
+      height: 60px; /* Altura definida para a caixa da imagem */
       z-index: 3;
       display: none;
       filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+      /* Propriedades de imagem de fundo */
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: bottom center;
     }
+    /* --------------------------------------------- */
 
+    /* Telas de Fim/Início */
     .overlay-screen {
       position: absolute;
       top: 0;
@@ -197,70 +284,69 @@
       justify-content: center;
       align-items: center;
       z-index: 20;
-      border-radius: 16px;
     }
 
     .modal-box {
       background: var(--white);
-      padding: 25px 20px;
+      padding: 15px 20px;
       border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
       text-align: center;
-      width: 90%;
-      max-width: 340px;
-      max-height: 95vh;
-      overflow-y: auto;
-      transform: scale(1);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      width: 85%;
+      max-width: 300px;
     }
 
     .modal-box h2 {
       background: linear-gradient(45deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-size: 1.8rem;
-      margin-bottom: 10px;
+      font-size: 1.5rem;
+      margin-bottom: 8px;
     }
 
     .modal-box p {
       color: #666;
-      margin-bottom: 20px;
-      font-size: 1rem;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
     }
 
     .corgi-ready-img {
-      max-width: 120px;
+      max-width: 80px;
       height: auto;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
+      border-radius: 50%;
     }
 
-    .emoji-large {
-      font-size: 3rem;
+    .game-over-img {
+      max-width: 110px;
+      height: auto;
       margin-bottom: 10px;
     }
 
     .stats-box {
       background: #f8f9fa;
       border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 20px;
+      padding: 10px;
+      margin-bottom: 15px;
       border: 1px solid #eee;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
     }
 
     .stats-box div {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
       color: var(--text-dark);
-      margin: 5px 0;
     }
 
     .action-btn {
-      padding: 12px 30px;
+      padding: 10px 25px;
       background: var(--primary);
       color: var(--white);
       border: none;
       border-radius: 30px;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(255, 159, 28, 0.4);
@@ -268,7 +354,6 @@
       width: 100%;
     }
 
-    /* Efeito ao passar o mouse: Transição para o Roxo */
     .action-btn:hover {
       background: var(--accent);
       transform: translateY(-2px);
@@ -282,7 +367,7 @@
     #message { display: none; }
 
     #controls {
-      margin-top: 20px;
+      margin-top: 15px;
       color: #888;
       font-size: 0.9rem;
     }
@@ -297,31 +382,38 @@
 
     @media (min-width: 768px) {
       #corgi { width: 90px; height: 70px; }
-      #obstacle { font-size: 50px; }
+      /* Removido o font-size do obstacle media query pois agora é imagem */
     }
   </style>
 </head>
 <body>
   <div id="game-container">
     <header>
-      <h1>Corgi Run</h1> <div id="score-display">Score: 0</div>
+      <h1>Corgi Run</h1> 
+      <div class="header-stats">
+        <button id="mute-btn" class="icon-btn" title="Mute/Unmute">🔊</button>
+        <div id="high-score-header">Best: 0</div>
+        <div id="score-display">Score: 0</div>
+      </div>
     </header>
 
     <div id="game-area">
+      <div id="stars-container"></div>
+      
       <div id="start-screen" class="overlay-screen">
         <div class="modal-box">
           <img src="https://wallpapers.com/images/hd/smiling-corgi-headshot-png-l2qngaxx0vtgc2u9.jpg" alt="Smiling Corgi" class="corgi-ready-img">
           <h2>Ready to Run?</h2>
-          <p>Dodge the cacti and beat your high score!</p>
+          <p>Dodge the cacti and ghosts!</p>
           <button id="start-btn" class="action-btn">Start Game</button>
         </div>
       </div>
       
       <div id="message" class="overlay-screen">
         <div class="modal-box">
-          <div class="emoji-large">💥</div>
+          <img src="https://i.redd.it/1mys0cr085c91.png" alt="Funny Dead Corgi" class="game-over-img">
           <h2>Game Over!</h2>
-          <p>Ouch! You bumped into a cactus.</p>
+          <p>Ouch! You bumped into something.</p>
           <div class="stats-box">
             <div id="final-score">Score: 0</div>
             <div id="high-score">Best: 0</div>
@@ -331,7 +423,7 @@
       </div>
 
       <div id="corgi"></div>
-      <div id="obstacle">🌵</div>
+      <div id="obstacle"></div>
       <div id="ground"></div>
     </div>
 
@@ -341,16 +433,26 @@
   </div>
 
   <script>
+    // --- NOVO: LINKS PARA OS OBSTÁCULOS PNG ---
+    const ASSETS = {
+      cactus: 'https://static.vecteezy.com/system/resources/previews/009/400/064/non_2x/cactus-clipart-design-illustration-free-png.png',
+      ghost: 'https://static.vecteezy.com/system/resources/previews/011/793/532/non_2x/simplicity-halloween-ghost-freehand-drawing-flat-design-free-png.png'
+    };
+    // ------------------------------------------
+
     const DOM = {
       corgi: document.getElementById('corgi'),
       obstacle: document.getElementById('obstacle'),
       message: document.getElementById('message'),
       scoreDisplay: document.getElementById('score-display'),
+      highScoreHeader: document.getElementById('high-score-header'),
       finalScore: document.getElementById('final-score'),
       highScoreText: document.getElementById('high-score'),
       gameArea: document.getElementById('game-area'),
       startScreen: document.getElementById('start-screen'),
-      ground: document.getElementById('ground')
+      ground: document.getElementById('ground'),
+      starsContainer: document.getElementById('stars-container'),
+      muteBtn: document.getElementById('mute-btn')
     };
 
     const state = {
@@ -365,31 +467,121 @@
       jumpPower: -16,  
       isGrounded: true,
       obstacleX: 1000,
-      gameLoopId: null
+      gameLoopId: null,
+      isMuted: false 
     };
 
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playJumpSound() {
+      if (state.isMuted) return; 
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      
+      osc.type = 'sine';
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      
+      const now = audioCtx.currentTime;
+      osc.frequency.setValueAtTime(300, now);
+      osc.frequency.exponentialRampToValueAtTime(600, now + 0.1);
+      
+      gainNode.gain.setValueAtTime(0.3, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+      
+      osc.start(now);
+      osc.stop(now + 0.1);
+    }
+
+    function playGameOverSound() {
+      if (state.isMuted) return; 
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      
+      osc.type = 'sawtooth';
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      
+      const now = audioCtx.currentTime;
+      osc.frequency.setValueAtTime(150, now);
+      osc.frequency.exponentialRampToValueAtTime(50, now + 0.5);
+      
+      gainNode.gain.setValueAtTime(0.3, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+      
+      osc.start(now);
+      osc.stop(now + 0.5);
+    }
+
     function init() {
+      const savedScore = localStorage.getItem('corgiHighScore');
+      if (savedScore) {
+        state.highScore = parseInt(savedScore, 10);
+        DOM.highScoreHeader.textContent = `Best: ${state.highScore}`;
+        DOM.highScoreText.textContent = `Best: ${state.highScore}`;
+      }
+
       createClouds();
+      createStars();
       setupEvents();
     }
 
     function createClouds() {
-      for (let i = 0; i < 3; i++) {
+      DOM.gameArea.querySelectorAll('.cloud').forEach(c => c.remove());
+      for (let i = 0; i < 4; i++) {
         const cloud = document.createElement('div');
         cloud.className = 'cloud';
         cloud.style.width = `${Math.random() * 50 + 40}px`;
         cloud.style.height = `${Math.random() * 15 + 15}px`;
-        cloud.style.left = `${Math.random() * 100}%`;
         cloud.style.top = `${Math.random() * 25}%`;
-        cloud.style.opacity = Math.random() * 0.4 + 0.6;
+        
+        const duration = Math.random() * 15 + 15; 
+        const delay = Math.random() * -30; 
+        cloud.style.animation = `floatClouds ${duration}s linear ${delay}s infinite`;
+        
         DOM.gameArea.appendChild(cloud);
       }
+    }
+
+    function createStars() {
+      for (let i = 0; i < 25; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 3 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 50}%`;
+        star.style.animationDelay = `${Math.random() * 2}s`;
+        DOM.starsContainer.appendChild(star);
+      }
+    }
+
+    function spawnShootingStar() {
+      const star = document.createElement('div');
+      star.className = 'shooting-star';
+      star.style.left = `${Math.random() * 60 + 40}%`;
+      star.style.top = `${Math.random() * 20}%`;
+      star.style.animation = 'shoot 1.2s linear forwards';
+      DOM.starsContainer.appendChild(star);
+      
+      setTimeout(() => star.remove(), 1200);
     }
 
     function setupEvents() {
       document.getElementById('start-btn').addEventListener('click', startGame);
       document.getElementById('restart-btn').addEventListener('click', startGame);
       
+      DOM.muteBtn.addEventListener('click', () => {
+        state.isMuted = !state.isMuted;
+        DOM.muteBtn.textContent = state.isMuted ? '🔇' : '🔊';
+        DOM.muteBtn.blur(); 
+      });
+
       const jumpHandler = (e) => {
         if(e.code === 'Space') e.preventDefault(); 
         if (!state.isGaming && e.type !== 'keydown') return;
@@ -408,10 +600,13 @@
       if (state.isGrounded && state.isGaming) {
         state.corgiVelocity = state.jumpPower;
         state.isGrounded = false;
+        playJumpSound();
       }
     }
 
     function startGame() {
+      if (!state.isMuted && audioCtx.state === 'suspended') audioCtx.resume();
+      
       state.isGaming = true;
       state.score = 0;
       state.frames = 0;
@@ -420,9 +615,15 @@
       state.obstacleX = DOM.gameArea.offsetWidth + 50;
       state.corgiVelocity = 0;
       
+      DOM.gameArea.classList.remove('night-mode');
       DOM.startScreen.style.display = 'none';
       DOM.message.style.display = 'none';
+      
+      // --- AJUSTE: INICIA COM IMAGEM DO CACTO ---
+      DOM.obstacle.style.backgroundImage = `url(${ASSETS.cactus})`;
       DOM.obstacle.style.display = 'block';
+      // ----------------------------------------
+      
       DOM.ground.classList.add('ground-moving');
       DOM.scoreDisplay.textContent = `Score: 0`;
 
@@ -437,6 +638,10 @@
       updateObstacle();
       checkCollision();
       updateScore();
+
+      if (DOM.gameArea.classList.contains('night-mode') && Math.random() < 0.005) {
+        spawnShootingStar();
+      }
 
       state.gameLoopId = requestAnimationFrame(gameLoop);
     }
@@ -459,6 +664,14 @@
       
       if (state.obstacleX < -80) {
         state.obstacleX = DOM.gameArea.offsetWidth + Math.random() * 400 + 200; 
+        
+        // --- AJUSTE: TROCA A IMAGEM DE FUNDO DEPENDENDO DO MODO ---
+        if (DOM.gameArea.classList.contains('night-mode')) {
+          DOM.obstacle.style.backgroundImage = `url(${ASSETS.ghost})`; 
+        } else {
+          DOM.obstacle.style.backgroundImage = `url(${ASSETS.cactus})`; 
+        }
+        // --------------------------------------------------------
       }
       
       DOM.obstacle.style.left = `${state.obstacleX}px`;
@@ -472,6 +685,13 @@
         
         if (state.score % 50 === 0) {
           state.speed += 0.8;
+        }
+
+        const cycle = Math.floor(state.score / 200);
+        if (cycle % 2 !== 0) {
+          DOM.gameArea.classList.add('night-mode');
+        } else {
+          DOM.gameArea.classList.remove('night-mode');
         }
       }
     }
@@ -497,8 +717,14 @@
       state.isGaming = false;
       DOM.ground.classList.remove('ground-moving');
       
-      state.highScore = Math.max(state.score, state.highScore);
+      playGameOverSound();
       
+      if (state.score > state.highScore) {
+        state.highScore = state.score;
+        localStorage.setItem('corgiHighScore', state.highScore);
+      }
+      
+      DOM.highScoreHeader.textContent = `Best: ${state.highScore}`;
       DOM.finalScore.textContent = `Score: ${state.score}`;
       DOM.highScoreText.textContent = `Best: ${state.highScore}`;
       
