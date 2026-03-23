@@ -8,9 +8,9 @@
     :root {
       --mario-sky: #5c94fc;
       --night-sky: #0f172a;
-      --primary: #FF9F1C;
+      --primary: #FF9F1C; /* Laranja */
       --secondary: #FFBF69;
-      --accent: #7f5af0;
+      --accent: #7f5af0;  /* Roxo */
       --background: #CBF3F0;
       --text: #2EC4B6;
       --text-dark: #2B2D42;
@@ -135,7 +135,6 @@
       background-color: var(--night-sky);
     }
 
-    /* Sol / Lua */
     #game-area::after {
       content: '';
       position: absolute;
@@ -155,7 +154,6 @@
       box-shadow: 0 0 20px #cbd5e1;
     }
 
-    /* Sistema de Estrelas */
     #stars-container {
       position: absolute;
       top: 0;
@@ -266,15 +264,14 @@
       background-position: bottom center;
     }
 
-    /* --- NOVO DESIGN: MODAL RETANGULAR (HORIZONTAL) E GLASSMORPHISM --- */
+    /* --- LAYOUT DO MODAL OTIMIZADO PARA PERFORMANCE E COM DESTAQUE ROXO --- */
     .overlay-screen {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(5px);
+      background: rgba(255, 255, 255, 0.92); /* Removido o blur pesadão, substituído por opacidade sólida */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -282,22 +279,22 @@
     }
 
     .modal-box {
-      background: rgba(255, 255, 255, 0.95);
+      background: var(--white);
       padding: 15px 25px; 
       border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2), inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+      box-shadow: 0 10px 30px rgba(127, 90, 240, 0.15); /* Sombra mais leve com tom arroxeado */
       width: 95%;
-      max-width: 450px; /* Mais largo para o layout horizontal */
+      max-width: 450px; 
       display: flex;
-      flex-direction: row; /* Coloca imagem de um lado e texto do outro */
+      flex-direction: row; 
       align-items: center;
       gap: 20px;
       text-align: left;
-      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      animation: popIn 0.3s ease-out forwards;
     }
 
     @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+      0% { opacity: 0; transform: scale(0.9) translateY(10px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
@@ -315,10 +312,10 @@
     }
 
     .modal-box h2 {
-      background: linear-gradient(45deg, var(--primary), var(--accent));
+      background: linear-gradient(45deg, var(--accent), var(--primary)); /* Começa com Roxo agora */
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-size: 1.4rem; 
+      font-size: 1.5rem; 
       margin-bottom: 2px; 
       line-height: 1.2;
     }
@@ -334,14 +331,12 @@
       width: 80px; 
       height: 80px; 
       object-fit: contain;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
     }
 
     .corgi-ready-img {
       border-radius: 50%;
     }
 
-    /* Novos Badges de Stats profissionais */
     .stats-box {
       display: flex;
       gap: 10px;
@@ -350,42 +345,47 @@
     }
 
     .stat-badge {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      background: #fcfcfc;
+      border: 2px solid #e2e8f0;
       border-radius: 12px;
       padding: 6px 10px;
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
     }
+
+    /* Cores Temáticas nos Badges */
+    .stat-badge.score-badge { border-color: var(--accent); background: #f3f0ff; }
+    .stat-badge.score-badge .stat-value { color: var(--accent); }
+    
+    .stat-badge.best-badge { border-color: var(--primary); background: #fff8f0; }
+    .stat-badge.best-badge .stat-value { color: var(--primary); }
 
     .stat-label {
       font-size: 0.7rem;
       text-transform: uppercase;
-      color: #94a3b8;
+      color: #64748b;
       font-weight: 800;
       letter-spacing: 0.5px;
     }
 
     .stat-value {
       font-size: 1.2rem;
-      color: var(--text-dark);
       font-weight: 900;
       line-height: 1.1;
     }
 
     .action-btn {
       padding: 10px 15px; 
-      background: linear-gradient(to right, var(--primary), #fca311);
+      background: linear-gradient(to right, var(--accent), #9374ff); /* Roxo predominante */
       color: var(--white);
       border: none;
       border-radius: 12px;
       font-size: 0.95rem; 
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(255, 159, 28, 0.3);
+      box-shadow: 0 4px 15px rgba(127, 90, 240, 0.4);
       transition: all 0.2s ease;
       width: 100%;
       text-transform: uppercase;
@@ -394,7 +394,7 @@
 
     .action-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 159, 28, 0.5);
+      box-shadow: 0 6px 20px rgba(127, 90, 240, 0.6);
       filter: brightness(1.05);
     }
 
@@ -418,7 +418,6 @@
       color: #aaa;
     }
 
-    /* Media query caso alguém jogue num celular em pé bem estreito */
     @media (max-width: 400px) {
       .modal-box {
         flex-direction: column;
@@ -464,11 +463,11 @@
           <div class="modal-content">
             <h2>Game Over!</h2>
             <div class="stats-box">
-              <div class="stat-badge">
+              <div class="stat-badge score-badge">
                 <span class="stat-label">Score</span>
                 <span class="stat-value" id="final-score">0</span>
               </div>
-              <div class="stat-badge">
+              <div class="stat-badge best-badge">
                 <span class="stat-label">Best</span>
                 <span class="stat-value" id="high-score">0</span>
               </div>
@@ -513,12 +512,12 @@
       isGaming: false,
       score: 0,
       highScore: 0,
-      speed: 7, 
+      speed: 7, // Voltei para 7 para resolver a lentidão
       frames: 0,
       corgiY: 0,
       corgiVelocity: 0,
       gravity: 0.8,    
-      jumpPower: -15, 
+      jumpPower: -16, // Voltei para -16 para o pulo ficar ágil
       isGrounded: true,
       obstacleX: 1000,
       gameLoopId: null,
@@ -576,7 +575,6 @@
       if (savedScore) {
         state.highScore = parseInt(savedScore, 10);
         DOM.highScoreHeader.textContent = `Best: ${state.highScore}`;
-        // Agora injetamos só o número na span nova
         DOM.highScoreText.textContent = state.highScore; 
       }
 
@@ -665,7 +663,7 @@
       state.isGaming = true;
       state.score = 0;
       state.frames = 0;
-      state.speed = 6.5; 
+      state.speed = 7; // Física rápida de volta
       state.corgiY = 0;
       state.obstacleX = DOM.gameArea.offsetWidth + 50;
       state.corgiVelocity = 0;
@@ -735,7 +733,7 @@
         DOM.scoreDisplay.textContent = `Score: ${state.score}`;
         
         if (state.score % 50 === 0) {
-          state.speed += 0.7; 
+          state.speed += 0.8; 
         }
 
         const cycle = Math.floor(state.score / 200);
@@ -776,7 +774,6 @@
       }
       
       DOM.highScoreHeader.textContent = `Best: ${state.highScore}`;
-      // Injetando só os números no novo layout
       DOM.finalScore.textContent = state.score;
       DOM.highScoreText.textContent = state.highScore;
       
