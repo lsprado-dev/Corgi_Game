@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Corgi Rage Run</title>
+  <title>Corgi Run - by Lucas Prado</title>
   <style>
     :root {
-      --primary: #FF7D00;
-      --secondary: #FFAA33;
-      --background: #FFF8F0;
-      --text: #333;
-      --obstacle: #E63946;
-      --ground: #6D4C41;
+      --mario-sky: #5c94fc; /* Azul clássico do Mario */
+      --primary: #FF9F1C;
+      --secondary: #FFBF69;
+      --background: #CBF3F0;
+      --text: #2EC4B6;
+      --text-dark: #2B2D42;
+      --ground-top: #80ED99;
+      --ground-bottom: #57CC99;
+      --white: #FFFFFF;
+      /* Cores das colinas do Mario */
+      --hill-dark: #00a800;
+      --hill-light: #4bd04b;
     }
 
     * {
@@ -19,15 +25,16 @@
       padding: 0;
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      background-color: var(--background);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: var(--text-dark);
       overflow: hidden;
       text-align: center;
       user-select: none;
-      padding: 10px;
+      padding: 15px;
       height: 100vh;
       display: flex;
       flex-direction: column;
@@ -37,7 +44,6 @@
     #game-container {
       max-width: 800px;
       margin: 0 auto;
-      padding: 10px;
       position: relative;
       flex: 1;
       display: flex;
@@ -49,544 +55,462 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-      gap: 10px;
+      margin-bottom: 20px;
+      padding: 0 10px;
     }
 
     h1 {
-      font-size: clamp(1.5rem, 6vw, 2rem);
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin: 0;
+      font-size: clamp(1.5rem, 5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     #score-display {
       font-size: clamp(1rem, 4vw, 1.2rem);
-      color: var(--primary);
-      background: white;
-      padding: 5px 15px;
-      border-radius: 20px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      color: var(--text-dark);
+      background: var(--white);
+      padding: 8px 20px;
+      border-radius: 25px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      font-weight: 700;
     }
 
     #game-area {
       position: relative;
       width: 100%;
       flex: 1;
-      min-height: 200px;
-      max-height: 60vh;
-      background: white;
-      border-radius: 15px;
+      min-height: 250px;
+      max-height: 50vh;
+      background-color: var(--mario-sky); /* Fundo Céu do Mario */
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      touch-action: manipulation;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: 4px solid var(--white);
     }
 
-    #start-screen {
+    /* --- Recriação do Fundo do Mario com CSS (As Colinas e Arbustos) --- */
+    #game-area::before {
+      content: '';
       position: absolute;
-      top: 0;
+      bottom: 25px; /* Acima do chão */
       left: 0;
       width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.9);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 20;
+      height: 120px;
+      z-index: 0;
+      background-image: 
+        /* Colina Grande */
+        radial-gradient(circle at 20% 120px, var(--hill-dark) 60px, transparent 61px),
+        radial-gradient(circle at 20% 110px, var(--hill-light) 60px, transparent 61px),
+        /* Colina Média */
+        radial-gradient(circle at 70% 130px, var(--hill-dark) 50px, transparent 51px),
+        radial-gradient(circle at 70% 120px, var(--hill-light) 50px, transparent 51px),
+        /* Arbustos */
+        radial-gradient(circle at 45% 150px, #00cd00 25px, transparent 26px),
+        radial-gradient(circle at 50% 145px, #00cd00 30px, transparent 31px),
+        radial-gradient(circle at 55% 150px, #00cd00 25px, transparent 26px);
+      background-position: 0 0;
+      opacity: 0.8;
     }
 
-    #start-screen h2 {
-      color: var(--primary);
-      font-size: clamp(1.5rem, 6vw, 1.8rem);
-      margin-bottom: 15px;
-      text-align: center;
-      padding: 0 10px;
+    /* O Sol/Lua do Mario (mais simples) */
+    #game-area::after {
+      content: '';
+      position: absolute;
+      top: 30px;
+      right: 50px;
+      width: 40px;
+      height: 40px;
+      background: #fde047;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #fef08a;
+      z-index: 0;
     }
 
-    #start-btn {
-      padding: 8px 20px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 20px;
-      font-size: clamp(1rem, 4vw, 1.1rem);
-      cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      transition: all 0.2s;
-    }
-
-    #start-btn:hover {
-      background: var(--secondary);
-      transform: translateY(-2px);
+    .cloud {
+      position: absolute;
+      background: var(--white);
+      border-radius: 50px;
+      opacity: 0.95;
+      z-index: 1;
+      box-shadow: 20px 10px 0 5px var(--white), 40px 0px 0 0px var(--white);
     }
 
     #ground {
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 15px;
-      background-color: var(--ground);
-      z-index: 1;
+      height: 25px;
+      background: linear-gradient(to bottom, var(--ground-top) 30%, var(--ground-bottom) 100%);
+      border-top: 3px solid #2d6a4f;
+      z-index: 2;
+    }
+
+    .ground-moving {
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 20px,
+        rgba(0, 0, 0, 0.05) 20px,
+        rgba(0, 0, 0, 0.05) 40px
+      );
+      animation: scrollGround 0.6s linear infinite;
+    }
+
+    @keyframes scrollGround {
+      from { background-position: 0 0; }
+      to { background-position: -56px 0; }
     }
 
     #corgi {
       position: absolute;
-      bottom: 15px;
-      left: 40px;
-      width: 70px;
-      height: 50px;
+      bottom: 25px;
+      left: 10%;
+      width: 80px;
+      height: 60px;
       background-image: url('https://media.baamboozle.com/uploads/images/319422/1626469260_45848_gif-url.gif');
       background-size: contain;
+      background-position: bottom;
       background-repeat: no-repeat;
-      z-index: 3;
-      transition: transform 0.1s;
-      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+      z-index: 4;
+      filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.15));
     }
 
     #obstacle {
       position: absolute;
-      bottom: 15px;
-      right: -100px;
-      font-size: 24px;
-      color: var(--obstacle);
-      width: 50px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      z-index: 2;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-      transform: rotate(5deg);
-    }
-
-    .jump {
-      animation: jump 0.6s cubic-bezier(0.3, 0.7, 0.4, 1);
-    }
-
-    @keyframes jump {
-      0% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-100px) rotate(-10deg); }
-      100% { transform: translateY(0) rotate(0deg); }
-    }
-
-    #message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 350px;
-      color: var(--obstacle);
-      text-align: center;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      z-index: 10;
+      bottom: 22px;
+      left: 100%;
+      font-size: 45px;
+      z-index: 3;
       display: none;
-      border: 3px solid var(--primary);
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
     }
 
-    #message h2 {
-      font-size: clamp(1.5rem, 6vw, 1.8rem);
-      margin-bottom: 8px;
-      color: var(--obstacle);
-      line-height: 1.2;
+    .overlay-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(3px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+      border-radius: 16px;
     }
 
-    #message p {
-      font-size: clamp(0.9rem, 4vw, 1rem);
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
-
-    #final-score {
-      display: block;
-      font-size: clamp(1.1rem, 4vw, 1.3rem);
-      font-weight: bold;
-      margin: 8px 0;
-      color: var(--primary);
-    }
-
-    #laughing-emoji {
-      font-size: clamp(2rem, 8vw, 2.5rem);
-      display: block;
-      margin: 10px 0;
-      animation: laugh 0.5s infinite alternate;
-    }
-
-    @keyframes laugh {
-      0% { transform: rotate(-10deg); }
-      100% { transform: rotate(10deg) scale(1.1); }
-    }
-
-    #restart-btn {
-      padding: 8px 20px;
-      background: var(--primary);
-      color: white;
-      border: none;
+    .modal-box {
+      background: var(--white);
+      padding: 30px;
       border-radius: 20px;
-      font-size: clamp(0.9rem, 4vw, 1rem);
-      cursor: pointer;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-      transition: all 0.2s;
-      margin-top: 8px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+      text-align: center;
+      max-width: 90%;
+      width: 340px;
+      transform: scale(1);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    #restart-btn:hover {
-      background: var(--secondary);
-      transform: translateY(-3px) scale(1.05);
+    .modal-box h2 {
+      color: var(--primary);
+      font-size: 1.8rem;
+      margin-bottom: 10px;
     }
+
+    .modal-box p {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+
+    /* --- O Corgi Sorridente que você pediu --- */
+    .corgi-ready-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid var(--secondary);
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .emoji-large {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .stats-box {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #eee;
+    }
+
+    .stats-box div {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin: 5px 0;
+    }
+
+    .action-btn {
+      padding: 12px 30px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 159, 28, 0.4);
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .action-btn:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 159, 28, 0.5);
+    }
+
+    .action-btn:active {
+      transform: translateY(1px);
+    }
+
+    #message { display: none; }
 
     #controls {
-      margin-top: 15px;
-      color: var(--text);
-      opacity: 0.7;
-      font-size: clamp(0.7rem, 3vw, 0.8rem);
+      margin-top: 20px;
+      color: #888;
+      font-size: 0.9rem;
     }
 
-    .cloud {
-      position: absolute;
-      background: white;
-      border-radius: 50%;
-      opacity: 0.8;
-      z-index: 0;
-    }
-
+    #controls p { margin-bottom: 5px; }
+    
     #credits {
-      margin-top: 8px;
-      font-size: clamp(0.6rem, 3vw, 0.7rem);
-      color: var(--text);
-      opacity: 0.6;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #aaa;
     }
 
     @media (min-width: 768px) {
-      #game-area {
-        max-height: 300px;
-      }
-      
-      #corgi {
-        width: 80px;
-        height: 60px;
-        left: 50px;
-        bottom: 20px;
-      }
-      
-      #obstacle {
-        font-size: 28px;
-        width: 60px;
-        height: 50px;
-        bottom: 20px;
-      }
-      
-      #ground {
-        height: 20px;
-      }
-      
-      #message {
-        max-width: 400px;
-        padding: 25px;
-      }
-    }
-
-    /* iOS specific fixes */
-    @supports (-webkit-touch-callout: none) {
-      body {
-        height: -webkit-fill-available;
-      }
-      
-      #game-container {
-        height: -webkit-fill-available;
-      }
-      
-      #game-area {
-        max-height: 70vh;
-      }
+      #corgi { width: 90px; height: 70px; }
+      #obstacle { font-size: 50px; }
     }
   </style>
 </head>
 <body>
   <div id="game-container">
     <header>
-      <h1>Corgi Rage Run</h1>
-      <div id="score-display">Score: 0</div>
+      <h1>Corgi Run</h1> <div id="score-display">Score: 0</div>
     </header>
 
     <div id="game-area">
-      <div id="start-screen">
-        <h2>Corgi Rage Run</h2>
-        <button id="start-btn">Start Game</button>
+      <div id="start-screen" class="overlay-screen">
+        <div class="modal-box">
+          <img src="https://wallpapers.com/images/hd/smiling-corgi-headshot-png-l2qngaxx0vtgc2u9.jpg" alt="Smiling Corgi" class="corgi-ready-img">
+          <h2>Ready to Run?</h2>
+          <p>Dodge the cacti and beat your high score!</p>
+          <button id="start-btn" class="action-btn">Start Game</button>
+        </div>
       </div>
       
+      <div id="message" class="overlay-screen">
+        <div class="modal-box">
+          <div class="emoji-large">💥</div>
+          <h2>Game Over!</h2>
+          <p>Ouch! You bumped into a cactus.</p>
+          <div class="stats-box">
+            <div id="final-score">Score: 0</div>
+            <div id="high-score">Best: 0</div>
+          </div>
+          <button id="restart-btn" class="action-btn">Play Again</button>
+        </div>
+      </div>
+
       <div id="corgi"></div>
-      <div id="obstacle">KURWA</div>
+      <div id="obstacle">🌵</div>
       <div id="ground"></div>
-      
-      <div id="message">
-        <h2>Zginąłeś? Ja Pierdolę! 😂</h2>
-        <div id="laughing-emoji">🤣</div>
-        <p>O nie! KURWA, pokonał cię!</p>
-        <span id="final-score">Score: 0 | Record: 0</span>
-        <button id="restart-btn">Play Again</button>
-      </div>
     </div>
 
     <div id="controls">
-      <p>Tap anywhere to jump</p>
-      <div id="credits">Created by Lucas</div>
-    </div>
+      <p>Tap, Click, or press Spacebar to jump!</p>
+      <div id="credits">Developed by Lucas Prado</div> </div>
   </div>
 
   <script>
-    // Elementos do DOM
     const DOM = {
       corgi: document.getElementById('corgi'),
       obstacle: document.getElementById('obstacle'),
       message: document.getElementById('message'),
       scoreDisplay: document.getElementById('score-display'),
       finalScore: document.getElementById('final-score'),
-      restartBtn: document.getElementById('restart-btn'),
+      highScoreText: document.getElementById('high-score'),
       gameArea: document.getElementById('game-area'),
       startScreen: document.getElementById('start-screen'),
-      startBtn: document.getElementById('start-btn'),
-      laughingEmoji: document.getElementById('laughing-emoji')
+      ground: document.getElementById('ground')
     };
-  
-    // Estado do jogo
-    const gameState = {
-      jumping: false,
-      gameOver: false,
-      gameStarted: false,
+
+    const state = {
+      isGaming: false,
       score: 0,
       highScore: 0,
-      speed: 5,
-      animationId: null,
-      obstacleActive: false
+      speed: 7, 
+      frames: 0,
+      corgiY: 0,
+      corgiVelocity: 0,
+      gravity: 0.8,    
+      jumpPower: -16,  
+      isGrounded: true,
+      obstacleX: 1000,
+      gameLoopId: null
     };
-  
-    // Inicialização
+
     function init() {
       createClouds();
-      setupEventListeners();
-      setRandomLaugh();
-      
-      // iOS height fix
-      if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        document.documentElement.style.height = '100%';
-        document.body.style.height = '100%';
-        document.getElementById('game-container').style.height = '100%';
-      }
+      setupEvents();
     }
-  
-    // Cria nuvens decorativas
+
     function createClouds() {
-      for (let i = 0; i < 5; i++) {
+      // Criação das nuvens (estilo Mario/Cartoon)
+      for (let i = 0; i < 3; i++) {
         const cloud = document.createElement('div');
         cloud.className = 'cloud';
-  
-        const size = Math.random() * 50 + 30;
-        const posX = Math.random() * 100;
-        const posY = Math.random() * 100;
-        const opacity = Math.random() * 0.5 + 0.3;
-  
-        cloud.style.width = `${size}px`;
-        cloud.style.height = `${size * 0.6}px`;
-        cloud.style.left = `${posX}%`;
-        cloud.style.top = `${posY}%`;
-        cloud.style.opacity = opacity;
-  
+        cloud.style.width = `${Math.random() * 50 + 40}px`;
+        cloud.style.height = `${Math.random() * 15 + 15}px`;
+        cloud.style.left = `${Math.random() * 100}%`;
+        cloud.style.top = `${Math.random() * 25}%`; // Bem no topo
+        cloud.style.opacity = Math.random() * 0.4 + 0.6;
         DOM.gameArea.appendChild(cloud);
       }
     }
-  
-    // Configura controles
-    function setupEventListeners() {
-      // Touch em qualquer lugar da tela
-      document.addEventListener('touchstart', handleTouch, { passive: false });
+
+    function setupEvents() {
+      document.getElementById('start-btn').addEventListener('click', startGame);
+      document.getElementById('restart-btn').addEventListener('click', startGame);
       
-      // Clique do mouse
-      document.addEventListener('click', handleClick);
-      
-      // Teclado
-      document.addEventListener('keydown', handleKeyPress);
-    }
-  
-    function handleTouch(e) {
-      if (!gameState.gameStarted) {
-        e.preventDefault();
-        startGame();
-        return;
-      }
-      
-      if (!gameState.jumping && !gameState.gameOver) {
-        e.preventDefault();
+      const jumpHandler = (e) => {
+        if(e.code === 'Space') e.preventDefault(); 
+        if (!state.isGaming && e.type !== 'keydown') return;
+        if (!state.isGaming && ['Space', 'ArrowUp', 'w'].includes(e.code)) return startGame();
         jump();
-      }
+      };
+
+      document.addEventListener('touchstart', jumpHandler, { passive: false });
+      document.addEventListener('mousedown', jumpHandler);
+      document.addEventListener('keydown', (e) => {
+        if (['Space', 'ArrowUp', 'w'].includes(e.code)) jumpHandler(e);
+      });
     }
-    
-    function handleClick(e) {
-      // Evita duplicação de eventos em dispositivos touch
-      if (e.pointerType === 'touch') return;
-      
-      if (!gameState.gameStarted) {
-        startGame();
-        return;
-      }
-      
-      if (!gameState.jumping && !gameState.gameOver) {
-        jump();
-      }
-    }
-  
-    function handleKeyPress(e) {
-      if (!gameState.gameStarted && ['Space', 'ArrowUp', 'w'].includes(e.code)) {
-        startGame();
-        return;
-      }
-      if (['Space', 'ArrowUp', 'w'].includes(e.code) && !gameState.jumping && !gameState.gameOver) {
-        jump();
-      }
-    }
-  
-    // Lógica do pulo
+
     function jump() {
-      if (gameState.jumping) return;
-      
-      gameState.jumping = true;
-      DOM.corgi.classList.add('jump');
-  
-      setTimeout(() => {
-        DOM.corgi.classList.remove('jump');
-        gameState.jumping = false;
-      }, 600);
+      if (state.isGrounded && state.isGaming) {
+        state.corgiVelocity = state.jumpPower;
+        state.isGrounded = false;
+      }
     }
-  
-    // Inicia o jogo
+
     function startGame() {
-      if (gameState.gameStarted) return;
-  
-      gameState.gameStarted = true;
-      gameState.gameOver = false;
-      resetGameState();
+      state.isGaming = true;
+      state.score = 0;
+      state.frames = 0;
+      state.speed = 7;
+      state.corgiY = 0;
+      state.obstacleX = DOM.gameArea.offsetWidth + 50;
+      state.corgiVelocity = 0;
+      
       DOM.startScreen.style.display = 'none';
       DOM.message.style.display = 'none';
-      spawnObstacle();
-    }
-  
-    // Reseta o estado do jogo
-    function resetGameState() {
-      gameState.score = 0;
-      gameState.speed = 5;
+      DOM.obstacle.style.display = 'block';
+      DOM.ground.classList.add('ground-moving');
       DOM.scoreDisplay.textContent = `Score: 0`;
-      gameState.obstacleActive = false;
+
+      if (state.gameLoopId) cancelAnimationFrame(state.gameLoopId);
+      gameLoop();
     }
-  
-    // Reseta o jogo
-    function resetGame() {
-      gameState.gameStarted = true;
-      gameState.gameOver = false;
-      resetGameState();
-      DOM.message.style.display = 'none';
-      spawnObstacle();
+
+    function gameLoop() {
+      if (!state.isGaming) return;
+
+      updatePhysics();
+      updateObstacle();
+      checkCollision();
+      updateScore();
+
+      state.gameLoopId = requestAnimationFrame(gameLoop);
     }
-  
-    // Gera obstáculos
-    function spawnObstacle() {
-      if (gameState.obstacleActive) return;
-      gameState.obstacleActive = true;
-  
-      let position = DOM.gameArea.offsetWidth;
-      DOM.obstacle.style.left = `${position}px`;
-  
-      const moveObstacle = () => {
-        if (gameState.gameOver) {
-          gameState.obstacleActive = false;
-          return;
-        }
-  
-        position -= gameState.speed;
-        DOM.obstacle.style.left = `${position}px`;
-  
-        updateScore();
-  
-        if (checkCollision()) {
-          endGame();
-          return;
-        }
-  
-        if (position < -100) {
-          gameState.obstacleActive = false;
-          setTimeout(spawnObstacle, Math.random() * 300 + 200);
-          cancelAnimationFrame(gameState.animationId);
-          return;
-        }
-  
-        gameState.animationId = requestAnimationFrame(moveObstacle);
-      };
-  
-      moveObstacle();
+
+    function updatePhysics() {
+      state.corgiVelocity += state.gravity;
+      state.corgiY += state.corgiVelocity;
+
+      if (state.corgiY >= 0) {
+        state.corgiY = 0;
+        state.isGrounded = true;
+        state.corgiVelocity = 0;
+      }
+
+      DOM.corgi.style.transform = `translateY(${state.corgiY}px)`;
     }
-  
+
+    function updateObstacle() {
+      state.obstacleX -= state.speed;
+      
+      if (state.obstacleX < -80) {
+        state.obstacleX = DOM.gameArea.offsetWidth + Math.random() * 400 + 200; 
+      }
+      
+      DOM.obstacle.style.left = `${state.obstacleX}px`;
+    }
+
     function updateScore() {
-      gameState.score++;
-      DOM.scoreDisplay.textContent = `Score: ${gameState.score}`;
-      if (gameState.score % 5 === 0) gameState.speed += 0.2;
+      state.frames++;
+      if (state.frames % 10 === 0) {
+        state.score++;
+        DOM.scoreDisplay.textContent = `Score: ${state.score}`;
+        
+        if (state.score % 150 === 0) { // Aumenta dificuldade a cada 150 pontos
+          state.speed += 0.7;
+        }
+      }
     }
-  
-    // Verifica colisão
+
     function checkCollision() {
       const corgiRect = DOM.corgi.getBoundingClientRect();
-      const obstacleRect = DOM.obstacle.getBoundingClientRect();
-  
-      return (
-        corgiRect.right > obstacleRect.left + 20 &&
-        corgiRect.left < obstacleRect.right - 20 &&
-        corgiRect.bottom > obstacleRect.top + 15
-      );
-    }
-  
-    // Finaliza o jogo
-    function endGame() {
-      gameState.gameOver = true;
-      gameState.gameStarted = false;
-      gameState.obstacleActive = false;
-      updateHighScore();
-      showGameOver();
-      cancelAnimationFrame(gameState.animationId);
-    }
-  
-    function updateHighScore() {
-      gameState.highScore = Math.max(gameState.highScore, gameState.score);
-      DOM.finalScore.textContent = `Score: ${gameState.score} | Record: ${gameState.highScore}`;
-    }
-  
-    function showGameOver() {
-      setRandomLaugh();
-      DOM.message.style.display = 'block';
-      DOM.restartBtn.style.display = 'inline-block';
-    }
-  
-    // Emoji aleatório de risada
-    function setRandomLaugh() {
-      const laughs = ['🤣', '😆', '😅', '💀', '☠️'];
-      DOM.laughingEmoji.textContent = laughs[Math.floor(Math.random() * laughs.length)];
-    }
-  
-    // Inicia o jogo quando a página carrega
-    window.addEventListener('load', init);
-    
-    // iOS resize fix
-    window.addEventListener('resize', function() {
-      if (window.innerHeight > 0) {
-        document.documentElement.style.height = window.innerHeight + 'px';
+      const obsRect = DOM.obstacle.getBoundingClientRect();
+
+      // Ajuste de margem (hitbox)
+      const toleranceX = 20; 
+      const toleranceY = 15;
+
+      if (
+        corgiRect.right - toleranceX > obsRect.left &&
+        corgiRect.left + toleranceX < obsRect.right &&
+        corgiRect.bottom - toleranceY > obsRect.top &&
+        corgiRect.top + toleranceY < obsRect.bottom
+      ) {
+        gameOver();
       }
-    });
+    }
+
+    function gameOver() {
+      state.isGaming = false;
+      DOM.ground.classList.remove('ground-moving');
+      
+      state.highScore = Math.max(state.score, state.highScore);
+      
+      DOM.finalScore.textContent = `Score: ${state.score}`;
+      DOM.highScoreText.textContent = `Best: ${state.highScore}`;
+      
+      DOM.message.style.display = 'flex';
+    }
+
+    window.addEventListener('load', init);
   </script>
 </body>
 </html>
