@@ -26,7 +26,7 @@
     }
 
     body {
-      background-color: transparent; /* Deixei transparente caso o fundo do seu site seja diferente */
+      background-color: transparent; 
       color: var(--text-dark);
       overflow: hidden;
       text-align: center;
@@ -52,7 +52,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       padding: 0 5px;
       flex-wrap: wrap; 
       gap: 10px;
@@ -266,99 +266,136 @@
       background-position: bottom center;
     }
 
-    /* --- OTIMIZAÇÃO DAS TELAS PARA O PORTFÓLIO --- */
+    /* --- NOVO DESIGN: MODAL RETANGULAR (HORIZONTAL) E GLASSMORPHISM --- */
     .overlay-screen {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(3px);
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(5px);
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 20;
     }
 
     .modal-box {
-      background: var(--white);
-      padding: 15px; 
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px 25px; 
       border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      text-align: center;
-      width: 90%;
-      max-width: 300px;
-      max-height: 90%; 
-      overflow-y: auto; 
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2), inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+      width: 95%;
+      max-width: 450px; /* Mais largo para o layout horizontal */
+      display: flex;
+      flex-direction: row; /* Coloca imagem de um lado e texto do outro */
+      align-items: center;
+      gap: 20px;
+      text-align: left;
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-image-container {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
     }
 
     .modal-box h2 {
       background: linear-gradient(45deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-size: 1.3rem; 
-      margin-bottom: 5px; 
+      font-size: 1.4rem; 
+      margin-bottom: 2px; 
+      line-height: 1.2;
     }
 
     .modal-box p {
-      color: #666;
-      margin-bottom: 10px; 
+      color: #64748b;
+      margin-bottom: 12px; 
       font-size: 0.85rem;
+      font-weight: 500;
     }
 
     .corgi-ready-img, .game-over-img {
-      max-width: 70px; 
-      max-height: 70px; 
+      width: 80px; 
+      height: 80px; 
       object-fit: contain;
-      margin-bottom: 8px;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
     }
 
     .corgi-ready-img {
       border-radius: 50%;
     }
 
+    /* Novos Badges de Stats profissionais */
     .stats-box {
-      background: #f8f9fa;
-      border-radius: 10px;
-      padding: 8px; 
-      margin-bottom: 10px; 
-      border: 1px solid #eee;
       display: flex;
-      justify-content: space-around;
-      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px; 
       width: 100%;
     }
 
-    .stats-box div {
-      font-size: 0.95rem;
-      font-weight: bold;
+    .stat-badge {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 6px 10px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #94a3b8;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
       color: var(--text-dark);
+      font-weight: 900;
+      line-height: 1.1;
     }
 
     .action-btn {
-      padding: 10px 20px; 
-      background: var(--primary);
+      padding: 10px 15px; 
+      background: linear-gradient(to right, var(--primary), #fca311);
       color: var(--white);
       border: none;
-      border-radius: 30px;
+      border-radius: 12px;
       font-size: 0.95rem; 
-      font-weight: bold;
+      font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(255, 159, 28, 0.4);
-      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 159, 28, 0.3);
+      transition: all 0.2s ease;
       width: 100%;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .action-btn:hover {
-      background: var(--accent);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(127, 90, 240, 0.5);
+      box-shadow: 0 6px 20px rgba(255, 159, 28, 0.5);
+      filter: brightness(1.05);
     }
 
     .action-btn:active {
@@ -368,17 +405,27 @@
     #message { display: none; }
 
     #controls {
-      margin-top: 10px;
+      margin-top: 8px;
       color: #888;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
 
-    #controls p { margin-bottom: 3px; }
+    #controls p { margin-bottom: 2px; }
     
     #credits {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
       color: #aaa;
+    }
+
+    /* Media query caso alguém jogue num celular em pé bem estreito */
+    @media (max-width: 400px) {
+      .modal-box {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+      .stat-badge { align-items: center; }
     }
   </style>
 </head>
@@ -398,23 +445,36 @@
       
       <div id="start-screen" class="overlay-screen">
         <div class="modal-box">
-          <img src="https://wallpapers.com/images/hd/smiling-corgi-headshot-png-l2qngaxx0vtgc2u9.jpg" alt="Smiling Corgi" class="corgi-ready-img">
-          <h2>Ready to Run?</h2>
-          <p>Dodge the cacti and ghosts!</p>
-          <button id="start-btn" class="action-btn">Start Game</button>
+          <div class="modal-image-container">
+            <img src="https://wallpapers.com/images/hd/smiling-corgi-headshot-png-l2qngaxx0vtgc2u9.jpg" alt="Smiling Corgi" class="corgi-ready-img">
+          </div>
+          <div class="modal-content">
+            <h2>Ready to Run?</h2>
+            <p>Dodge the cacti and ghosts!</p>
+            <button id="start-btn" class="action-btn">Start Game</button>
+          </div>
         </div>
       </div>
       
       <div id="message" class="overlay-screen">
         <div class="modal-box">
-          <img src="https://i.redd.it/1mys0cr085c91.png" alt="Funny Dead Corgi" class="game-over-img">
-          <h2>Game Over!</h2>
-          <p>Ouch! You bumped into something.</p>
-          <div class="stats-box">
-            <div id="final-score">Score: 0</div>
-            <div id="high-score">Best: 0</div>
+          <div class="modal-image-container">
+            <img src="https://i.redd.it/1mys0cr085c91.png" alt="Funny Dead Corgi" class="game-over-img">
           </div>
-          <button id="restart-btn" class="action-btn">Play Again</button>
+          <div class="modal-content">
+            <h2>Game Over!</h2>
+            <div class="stats-box">
+              <div class="stat-badge">
+                <span class="stat-label">Score</span>
+                <span class="stat-value" id="final-score">0</span>
+              </div>
+              <div class="stat-badge">
+                <span class="stat-label">Best</span>
+                <span class="stat-value" id="high-score">0</span>
+              </div>
+            </div>
+            <button id="restart-btn" class="action-btn">Play Again</button>
+          </div>
         </div>
       </div>
 
@@ -458,7 +518,7 @@
       corgiY: 0,
       corgiVelocity: 0,
       gravity: 0.8,    
-      jumpPower: -15, /* Pulo levemente ajustado para o novo tamanho */
+      jumpPower: -15, 
       isGrounded: true,
       obstacleX: 1000,
       gameLoopId: null,
@@ -516,7 +576,8 @@
       if (savedScore) {
         state.highScore = parseInt(savedScore, 10);
         DOM.highScoreHeader.textContent = `Best: ${state.highScore}`;
-        DOM.highScoreText.textContent = `Best: ${state.highScore}`;
+        // Agora injetamos só o número na span nova
+        DOM.highScoreText.textContent = state.highScore; 
       }
 
       createClouds();
@@ -604,7 +665,7 @@
       state.isGaming = true;
       state.score = 0;
       state.frames = 0;
-      state.speed = 6.5; // Começa ligeiramente mais lento pro jogador acostumar
+      state.speed = 6.5; 
       state.corgiY = 0;
       state.obstacleX = DOM.gameArea.offsetWidth + 50;
       state.corgiVelocity = 0;
@@ -674,7 +735,7 @@
         DOM.scoreDisplay.textContent = `Score: ${state.score}`;
         
         if (state.score % 50 === 0) {
-          state.speed += 0.7; // Aumenta a velocidade progressivamente
+          state.speed += 0.7; 
         }
 
         const cycle = Math.floor(state.score / 200);
@@ -715,8 +776,9 @@
       }
       
       DOM.highScoreHeader.textContent = `Best: ${state.highScore}`;
-      DOM.finalScore.textContent = `Score: ${state.score}`;
-      DOM.highScoreText.textContent = `Best: ${state.highScore}`;
+      // Injetando só os números no novo layout
+      DOM.finalScore.textContent = state.score;
+      DOM.highScoreText.textContent = state.highScore;
       
       DOM.message.style.display = 'flex';
     }
