@@ -26,7 +26,7 @@ My high score is 829. I challenge you to beat it!
 
 ## Live Demo
 The game can be accessed and played directly in the browser:
-[Play Corgi Run](https://lspradoo.github.io/Corgi_Game/)
+[Play Corgi Run](https://lsprado-dev.github.io/Corgi_Game/)
 
 ---
 Developed by Lucas Prado.
