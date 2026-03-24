@@ -3,7 +3,10 @@
 An infinite runner game developed with a focus on performance and user experience, created with both a personal and technical purpose.
 
 ## The Story Behind the Code
-I developed this project during a trip as a way to connect with my girlfriend. Knowing her admiration for Corgis, I used programming to create an interactive experience that could bridge the distance while I was away. This project demonstrates my ability to identify real human motivations and transform them into functional, engaging products.
+I developed this project during a trip as a way to connect with my girlfriend. Since she absolutely loves Corgis, I used programming to create an interactive experience that could bridge the distance while I was away. This project demonstrates my ability to identify real human motivations and transform them into functional, engaging products.
+
+## The Challenge
+My high score is 829. I challenge you to beat it!
 
 ## Technical Highlights
 * **Dynamic Day/Night Cycle:** The game features a real-time environment transition based on the player's score, changing background colors, obstacle types (shifting from cacti to ghosts), and visual effects like shooting stars.
